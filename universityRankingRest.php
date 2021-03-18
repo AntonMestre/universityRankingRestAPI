@@ -8,24 +8,32 @@
     </head>
     <body>
         <div class="container">
+			<div class="row">
 		
-            <!-- Title of the API -->
-            <h5 style="margin-top:25px;"><i class="bi bi-book" style="color:#0084E5"></i> University Ranking Rest <span style="color:#0084E5;"><b>API</b></span> </h5>
-            <div class="row">
-			
 				<!-- Left part of the page -->
-                <div class="col-2">
-					<ul class="list-group" style="margin-top:25px;">
-					  <li class="list-group-item"><a href="universityRankingRest.php" style="text-decoration: none;color:black;">API</a></li>
-					  <li class="list-group-item"><a href="documentation.php" style="text-decoration: none;color:black;">Documentation</a></li>
+				<div class="col-2">
+					<ul class="list-group" style="margin-top:50px;">
+						<li class="list-group-item" style="background-color:#0084E5;color:white;">Table of content</li>
+					</ul>
+					<ul class="list-group" style="margin-top:10px;">
+						<li class="list-group-item"><a href="universityRankingRest.php" style="text-decoration: none;color:black;">API</a></li>
+						<li class="list-group-item"><a href="documentation.php" style="text-decoration: none;color:black;">Documentation</a></li>
 					</ul>
 				</div>
-				
+					
 				<!-- Right part of the page -->
 				<div class="col" style="margin-left:25px;margin-top:20px;">
 				
+					<!-- Title of the API -->
+					<h5 style="margin-top:25px;margin-bottom:35px;"><i class="bi bi-book" style="color:#0084E5"></i> University Ranking Rest <span style="color:#0084E5;"><b>API</b></span><span class="by"> - By Boscals de Reals & Maystre </span></h5>
+					<hr>
+				
 					<!-- Title of the page -->
 					<h1>API</h1>
+					
+					<div class="alert alert-warning" role="alert">
+					  We recommend you to read the documentation to understand the goal of this API ! There are somes countries with no enougth data to give you back somes results !  <a href="http://iparla.iutbayonne.univ-pau.fr/~amaystre/Webservice/projet/documentation.php"> Click here to see the documentation</a>
+					</div>
 					
 					<!-- Form for the country -->
 					<label class="form-label">Country name</label>
@@ -40,13 +48,13 @@
 					<div id="display"></div>
 					
 					<!-- Title of the second part of the page (rankings) -->
-					<h1 style="margin-top:25px;">Rankings</h1>
+					<h1 style="margin-top:25px;margin-bottom:25px;">Rankings</h1>
 					<div class="container">
 						<div class="row align-items-start">
 							<div class="col">
 							
 								<!-- Title of the first table -->
-								<h5>Ranking by number of Universities</h5>
+								<h5 class="tabletitle">Ranking by number of Universities</h5>
 								
 								<!-- head of the first table -->
 								<table class="table">
@@ -66,7 +74,7 @@
 							<div class="col">
 							
 								<!-- Title of the second table -->
-								<h5>Ranking by inhabitants by University </h5>
+								<h5 class="tabletitle">Ranking by inhabitants by University </h5>
 								
 								<!-- head of the second table -->
 								<table class="table" >
@@ -74,7 +82,7 @@
 										<tr>
 											<th scope="col">n°</th>
 											<th scope="col">Country</th>
-											<th scope="col">Inhbitants/Universities</th>
+											<th scope="col">Inhbitants/University</th>
 										</tr>
 									</thead>
 									
@@ -86,7 +94,7 @@
 							<div class="col">
 							
 							<!-- Title of the third table -->
-							<h5>Ranking by area (kilometers²) by University </h5>
+							<h5 class="tabletitle">Ranking by area (kilometers²) by University </h5>
 
 								<!-- head of the third table -->
 								<table class="table" >
@@ -108,12 +116,15 @@
 				</div>
 			</div>
 		</div>
+
 	
 	<!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     
 	<!-- API JS -->
 	<script>
+	exceptionTab=["",
+	];
 	
 	// Declarations of XMLHttpRequest
 	var xhttp3 = new XMLHttpRequest();
@@ -216,7 +227,12 @@
 				}
 
 			};
-          xhttp2.open("GET", "http://universities.hipolabs.com/search?country="+countryName, true);xhttp2.send();          
+			if(countryName=="United States of America"){
+				xhttp2.open("GET", "http://universities.hipolabs.com/search?country=United%20States", true);xhttp2.send();
+			}
+			else{
+				xhttp2.open("GET", "http://universities.hipolabs.com/search?country="+countryName, true);xhttp2.send();
+			}          
         }
 
 		// Function that get all informations and ranking about a country and display it
@@ -224,23 +240,24 @@
             xhttp5.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var rep=JSON.parse(this.responseText);
-                    document.getElementById("display").innerHTML='	<div class="card" style="width: 400px;">\
-																		<img src="'+imgLink+'"  class="card-img-top" alt="...">\
-																		<div class="card-body">\
-																			<p class="card-text">\
+                    document.getElementById("display").innerHTML='	<div  class="etiquette">\
 																			<div class="row">\
 																				<div class="col">\
-																					<b>Name</b><br/><span style="padding-left:15px;">'+countryName+'</span>\
-																					<br/><b>Population</b><br/><span style="padding-left:15px;">'+population+'</span>\
-																					<br/><b>Number of universities</b><br/><span style="padding-left:15px;">'+numberOfUniversities+'</span>\
-																					<br/><b>Rank by number of Universities</b><br/><span style="padding-left:15px;">'+rep.RankNumberOfUniversities+'</span>\
-																					<br/><b>inhabitants by University</b><br/><span style="padding-left:15px;">'+Math.round(rep.inhabitantsByUniversities)+'</span>\
-																					<br/><b>Rank inhabitants by University</b><br/><span style="padding-left:15px;">'+rep.RankInhabitantsByUniversities+'</span>\
-																					<br/><b>area (kilometers²) by University</b><br/><span style="padding-left:15px;">'+Math.round(rep.areaByUniversity)+'</span>\
-																					<br/><b>Rank area (kilometers²) by University</b><br/><span style="padding-left:15px;">'+rep.RankAreaByUniversity+'</span>\
+																					<img src="'+imgLink+'" width="300px"   alt="...">\
+																				</div>\
+																				<div class="col">\
+																					<span class="infos"><b>Name</b><span class="info">'+countryName+'</span></span>\
+																					<br/><span class="infos"><b>Population</b><span  class="info">'+population+'</span></span>\
+																					<br/><span class="infos"><b>Number of universities</b><span  class="info">'+numberOfUniversities+'</span></span>\
+																					<br/><span class="infos"><b>Rank by number of Universities</b><span  class="info">'+rep.RankNumberOfUniversities+'</span></span>\
+																				</div>\
+																				<div class="col">\
+																					<span class="infos"><b>Inhabitants by University</b><span  class="info">'+Math.round(rep.inhabitantsByUniversity)+'</span></span>\
+																					<br/><span class="infos"><b>Rank inhabitants by University</b><span  class="info">'+rep.RankInhabitantsByUniversity+'</span></span>\
+																					<br/><span class="infos"><b>Area (kilometers²) by University</b><span  class="info">'+Math.round(rep.areaByUniversity)+'</span></span>\
+																					<br/><span class="infos"><b>Rank area (kilometers²) by University</b><span  class="info">'+rep.RankAreaByUniversity+'</span></span>\
 																				</div>\
 																			</div>\
-																		</div>\
 																	</div>';
                     document.getElementById("spin").innerHTML='';
                 }

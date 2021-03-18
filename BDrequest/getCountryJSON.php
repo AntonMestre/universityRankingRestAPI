@@ -24,8 +24,8 @@
 		$arr["Country"]=$row["name"];
 		$arr["NumberOfUniversities"]=$row["numberOfUniversities"];
 		$arr["RankNumberOfUniversities"]=$row["rank"];
-		$arr["inhabitantsByUniversities"]=$row["inhabitantsByUniversities"];
-		$arr["RankInhabitantsByUniversities"]=$row["rank2"];
+		$arr["inhabitantsByUniversity"]=$row["inhabitantsByUniversities"];
+		$arr["RankInhabitantsByUniversity"]=$row["rank2"];
 		$arr["areaByUniversity"]=$row["AreaByUniversity"];
 		$arr["RankAreaByUniversity"]=$row["rank3"];
 	}
