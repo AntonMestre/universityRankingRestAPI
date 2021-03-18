@@ -1,0 +1,16 @@
+body{
+
+}
+.link{
+    background-color: black;
+    padding:10px;
+    border-radius: 15px;
+    color:white;
+    width: auto;
+}
+.surligner-bleu{
+    color:#0084E5;
+}
+.surligner-rouge{
+    color:red;
+}
