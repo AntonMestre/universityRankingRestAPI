@@ -19,7 +19,12 @@
 			function lookingForUniversityRankingWithoutUpdate(){
 				xhttp6.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
-						document.getElementById("result").innerHTML=this.responseText;				
+						if(this.responseText!="[]"){
+							document.getElementById("result").innerHTML=this.responseText;
+						}else{
+							var obj = { error: "404", message: "Country not recognized" };
+							document.getElementById("result").innerHTML=JSON.stringify(obj);
+						}
 					}
 				};
 				xhttp6.open("GET", "http://iparla.iutbayonne.univ-pau.fr/~amaystre/Webservice/projet/BDrequest/getRankingOfOneWithoutUpdate.php?countryName="+country, true);xhttp6.send();
@@ -54,6 +59,9 @@
 							imgLink= rep[0].flag;
 							area=rep[0].area;
 							getUniversityInformations(population);
+						}else if(this.status == 404) {
+							var obj = { error: "404", message: "Country not recognized" };
+							document.getElementById("result").innerHTML=JSON.stringify(obj);
 						}
 					};
 				  xhttp.open("GET", "https://restcountries.eu/rest/v2/name/"+countryName, true);xhttp.send();

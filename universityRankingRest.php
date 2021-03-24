@@ -37,7 +37,9 @@
 					
 					<!-- Form for the country -->
 					<label class="form-label">Country name</label>
-					<input class="form-control" name="countryName" id="countryName" />
+					<input class="form-control" name="countryName" id="countryName" onkeypress="autoCompletion() " list="country-list" autocomplete="off" />
+					<datalist id="country-list">
+					</datalist>
 					<div class="form-check" style="margin:10px">
 					  <input type="checkbox" id="update" name="update" class="form-check-input" checked>
 					  <label class="form-check-label" for="update">Update informations</label>
@@ -133,6 +135,33 @@
 	var xhttp = new XMLHttpRequest();
 	var xhttp2 = new XMLHttpRequest();
 	var xhttp5 = new XMLHttpRequest();
+	var xhttp9 = new XMLHttpRequest();
+	
+	var countries = new Array();
+	getCountriesForAutoCompletion();
+	
+	// Function that get countries of teh API
+	function getCountriesForAutoCompletion(){
+		xhttp9.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var rep=JSON.parse(this.responseText);
+					for(var i =0; i< rep.length;i++){
+						countries.push(rep[i].name);
+					}
+				}
+			};
+        xhttp9.open("GET", "http://iparla.iutbayonne.univ-pau.fr/~amaystre/Webservice/projet/BDrequest/autoCompletion.php", true);xhttp9.send();   
+	}
+	
+	// Function that help the user to find the country he want
+	function autoCompletion(){
+		document.getElementById("country-list").innerHTML='';
+		for(var i =0; i < countries.length;i++){
+			if(countries[i].includes(document.getElementById("countryName").value)){
+				document.getElementById("country-list").innerHTML +='<option>'+countries[i]+'</option>';
+			}
+		}
+	}
 	
 	// Function that get the ranking of the top 10 country rank by number of universities
     function getRankingNumberOfUniversities(){
@@ -207,7 +236,10 @@
                 imgLink= rep[0].flag;
                 area=rep[0].area;
                 getUniversityInformations(population);
-            }
+            }else if(this.status == 404) {
+				 document.getElementById("display").innerHTML="<div class='alert alert-danger' role='alert'>Oops, seems that the country doesn't exist or we don't have enougth data</div>";
+				 document.getElementById("spin").innerHTML='';
+			}
           };
           xhttp.open("GET", "https://restcountries.eu/rest/v2/name/"+countryName, true);xhttp.send();
         }
@@ -224,7 +256,10 @@
 						numberOfUniversities++;
 					}
 					getRankingOfOne(population,numberOfUniversities,countryName,area);
-				}
+				}else if(this.status == 404) {
+				 document.getElementById("display").innerHTML="<div class='alert alert-danger' role='alert'>Oops, seems that the country doesn't exist or we don't have enougth data</div>";
+				 document.getElementById("spin").innerHTML='';
+			}
 
 			};
 			if(countryName=="United States of America"){
